@@ -1,0 +1,351 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portofolio Mahasiswa S1 Teknik Informatika UNU Yogyakarta - UTS Pemrograman Web dengan Python Django.">
+  <title>Portofolio Mahasiswa Informatika — UNU Yogyakarta</title>
+
+  <!-- Google Fonts: DM Sans & Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- External Static CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <!-- Topbar Header -->
+  <header class="wrap">
+    <div class="topbar">
+      <a class="brand" href="#beranda">Portofolio<span>ku</span></a>
+      
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav" aria-label="Navigasi utama">
+        <a href="#tentang">Tentang</a>
+        <a href="#pendidikan">Pendidikan</a>
+        <a href="#keahlian">Keahlian</a>
+        <a href="#karya">Karya</a>
+        <a class="nav-contact" href="#kontak">Hubungi saya</a>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button id="mobile-menu-toggle" type="button" aria-label="Buka navigasi" class="mobile-menu-btn">
+        <svg id="menu-icon-open" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="menu-icon-close" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: none;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav" class="mobile-nav">
+      <a href="#tentang" class="mobile-link">Tentang</a>
+      <a href="#pendidikan" class="mobile-link">Pendidikan</a>
+      <a href="#keahlian" class="mobile-link">Keahlian</a>
+      <a href="#karya" class="mobile-link">Karya</a>
+      <a href="#kontak" class="mobile-link" style="color: var(--green); font-weight: 700;">Hubungi Saya &rarr;</a>
+    </div>
+  </header>
+
+  <!-- Flash Messages / Notifikasi Django -->
+  {% if messages %}
+  <div class="wrap flash-wrap">
+    {% for message in messages %}
+    <div class="flash-alert {% if message.tags == 'success' %}flash-success{% else %}flash-error{% endif %}" role="alert">
+      <span>{{ message }}</span>
+      <button type="button" class="flash-close" onclick="this.parentElement.remove()" aria-label="Tutup notifikasi">&times;</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <main>
+    <!-- Hero / Profil Section -->
+    <section class="hero wrap" id="beranda">
+      <div>
+        <div class="eyebrow">Halo, saya Mahasiswa Informatika</div>
+        <h1>Hai semua, kenalin nama saya <em>Fikri</em></h1>
+        <p class="hero-copy">
+          Saat ini saya sedang menempuh pendidikan S1 Informatika di <strong>Universitas Nahdlatul Ulama Yogyakarta</strong> (Semester 3). Portofolio ini masih dalam pengembangan untuk <strong>UTS Pemrograman Web</strong> dengan backend <strong>Python Django</strong> serta antarmuka modern yang sederhana dan fungsional.
+        </p>
+        <div class="actions">
+          <a class="button" href="#karya">Lihat karya saya <span aria-hidden="true">↗</span></a>
+          <a class="button-outline" href="#" target="_blank" title="Unduh Portofolio PDF">Unduh PDF <span aria-hidden="true">↓</span></a>
+          <a class="text-link" href="#tentang">Kenali saya <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="portrait-wrap">
+        <img class="portrait" src="{% static 'img/Profile.png' %}" alt="Foto Profil Mahasiswa Teknik Informatika" onerror="this.onerror=null; this.src='{% static 'img/Profile.jpg' %}';">
+        <div class="portrait-note">
+          Terbuka untuk proyek
+          <span>S1 Informatika • UNU Yogyakarta</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work / Karya Section (Daftar Proyek Django) -->
+    <section class="work" id="karya">
+      <div class="wrap">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Pilihan terbaru</div>
+            <h2>Karya pilihan</h2>
+          </div>
+          <p>Kumpulan tugas dan proyek yang telah saya kembangkan selama perkuliahan dengan sepenuh hati.</p>
+        </div>
+
+        <div class="projects">
+          {% for item in daftar_proyek %}
+          <article class="project">
+            <a href="{{ item.link_proyek|default:'#kontak' }}" {% if item.link_proyek %}target="_blank" rel="noopener noreferrer"{% endif %} aria-label="Lihat proyek {{ item.judul }}">
+              <div class="project-art {% cycle 'art-one' 'art-two' 'art-three' %}">
+                <span class="project-label">{{ item.teknologi }} · {{ item.tanggal_dibuat|date:"Y" }}</span>
+              </div>
+              <div class="project-info">
+                <div>
+                  <h3>{{ item.judul }}</h3>
+                  <p>{{ item.deskripsi }}</p>
+                </div>
+                <span class="project-arrow" aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </article>
+          {% empty %}
+          <!-- Preview Contoh Proyek Bila Database Masih Kosong -->
+          <article class="project">
+            <a href="#kontak" aria-label="Lihat proyek Identitas Ruang">
+              <div class="project-art art-one">
+                <span class="project-label">Branding · 2025</span>
+              </div>
+              <div class="project-info">
+                <div>
+                  <h3>Identitas Ruang</h3>
+                  <p>Identitas visual dan sistem antarmuka untuk studio kreatif digital.</p>
+                </div>
+                <span class="project-arrow" aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </article>
+          <article class="project">
+            <a href="#kontak" aria-label="Lihat proyek Cerita Pagi">
+              <div class="project-art art-two">
+                <span class="project-label">Digital · 2025</span>
+              </div>
+              <div class="project-info">
+                <div>
+                  <h3>Cerita Pagi</h3>
+                  <p>Pengalaman web katalog interaktif untuk kedai kopi modern.</p>
+                </div>
+                <span class="project-arrow" aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </article>
+          <article class="project">
+            <a href="#kontak" aria-label="Lihat proyek Teman Tumbuh">
+              <div class="project-art art-three">
+                <span class="project-label">Produk · 2024</span>
+              </div>
+              <div class="project-info">
+                <div>
+                  <h3>Teman Tumbuh</h3>
+                  <p>Aplikasi web pelacak kebiasaan hidup sehat dengan backend Django.</p>
+                </div>
+                <span class="project-arrow" aria-hidden="true">↗</span>
+              </div>
+            </a>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Riwayat Pendidikan Section -->
+    <section class="education wrap" id="pendidikan">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">Latar belakang akademik</div>
+          <h2>Riwayat pendidikan</h2>
+        </div>
+        <p>Jejak pendidikan dan bidang keilmuan yang saya tempuh dalam pengembangan kompetensi teknologi.</p>
+      </div>
+
+      <div class="timeline">
+        <!-- Pendidikan 1: Perguruan Tinggi -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <h3>Universitas Nahdlatul Ulama Yogyakarta (UNU Yogyakarta)</h3>
+              <span class="timeline-period">2025 — Sekarang</span>
+            </div>
+            <div class="timeline-sub">S1 Teknik Informatika • Semester 3</div>
+            <p class="timeline-desc">
+              Mendalami konsep fundamental dan implementasi rekayasa perangkat lunak, pemrograman web berorientasi objek, struktur data & algoritma, serta perancangan basis data terintegrasi.
+            </p>
+            <div class="tag-pills">
+              <span>DI Yogyakarta</span>
+              <span>Fakultas Teknologi Informasi</span>
+              <span>Pemrograman Web</span>
+              <span>S1 Informatika</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pendidikan 2: Sekolah Menengah -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <h3>Pendidikan Menengah Atas (MAN 4 Bantul)</h3>
+              <span class="timeline-period">Lulus</span>
+            </div>
+            <div class="timeline-sub">Jurusan IPS</div>
+            <p class="timeline-desc">
+              Menyelesaikan pendidikan menengah dengan fokus pada mata pelajaran ilmu pengetahuan sosial dan ekonomi, membangun dasar penalaran kritis dan pemahaman tentang isu-isu sosial serta ekonomi.
+            </p>
+            <div class="tag-pills">
+              <span>Penalaran kritis</span>
+              <span>Matematika dasar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tentang & Keahlian Section -->
+    <section class="skills-section wrap" id="keahlian">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" id="tentang">Teknologi & kompetensi</div>
+          <h2>Keahlian yang dikuasai</h2>
+        </div>
+        <p>Kombinasi teknologi yang saya pelajari dan terapkan dalam membangun aplikasi web modern.</p>
+      </div>
+
+      <div class="skills-grid">
+        {% for grup in keahlian_kategori %}
+        <div class="skill-card">
+          <div>
+            <h3>{{ grup.kategori }}</h3>
+            <p>{{ grup.deskripsi }}</p>
+          </div>
+          <div class="skills" aria-label="Daftar keahlian {{ grup.kategori }}">
+            {% for item in grup.items %}
+            <span>
+              {{ item.nama }}
+              <small>({{ item.level }})</small>
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Kontak Section -->
+    <section class="contact-section wrap" id="kontak">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">Punya ide menarik?</div>
+          <h2>Mari buat sesuatu yang hebat bersama.</h2>
+        </div>
+        <p>Tertarik untuk berkolaborasi, mendiskusikan proyek, atau memiliki saran? Hubungi via WhatsApp atau kirim pesan formulir di bawah ini.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Kolom Kiri: WhatsApp & Info Akademik -->
+        <div>
+          <!-- WhatsApp Direct Card -->
+          <a class="contact-wa" href="https://wa.me/6287762472374?text=Halo,%20saya%20melihat%20portofolio%20Anda" target="_blank" rel="noopener noreferrer">
+            <div>
+              <div class="contact-wa-title">Hubungi Langsung via WhatsApp</div>
+              <p class="contact-wa-number">0877-6247-2374</p>
+            </div>
+            <div class="contact-wa-arrow" aria-hidden="true">↗</div>
+          </a>
+
+          <!-- Info Akademik Card -->
+          <div class="info-card">
+            <h4>Informasi Akademik</h4>
+            <div class="info-item">
+              <span class="info-label">Perguruan Tinggi</span>
+              <span class="info-value">Universitas Nahdlatul Ulama Yogyakarta</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Program Studi & Semester</span>
+              <span class="info-value">S1 Teknik Informatika • Semester 3</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Lokasi</span>
+              <span class="info-value">Jl. Ringroad Barat, Dowangan, Banyuraden, Kec. Gamping, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55293.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Formulir Kontak Django -->
+        <div class="form-card">
+          <form method="POST" action="{% url 'beranda' %}#kontak">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="nama">Nama Lengkap</label>
+              <input type="text" id="nama" name="nama" class="form-control" placeholder="Contoh: Ahmad Rizki" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Alamat Email</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="nama@gmail.com" required>
+            </div>
+            <div class="form-group">
+              <label for="pesan">Pesan Anda</label>
+              <textarea id="pesan" name="pesan" class="form-control" rows="4" placeholder="Tuliskan pesan, saran, atau tawaran kolaborasi..." required></textarea>
+            </div>
+            <button type="submit" class="button" style="width: 100%;">
+              Kirim Pesan <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="wrap">
+    <span>© Projek Portofolio 2026</span>
+    <div class="socials">
+      <a href="https://wa.me/6287762472374" target="_blank" rel="noreferrer">WhatsApp</a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+    </div>
+  </footer>
+
+  <!-- Script Toggle Mobile Menu -->
+  <script>
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    if (menuToggle && mobileNav) {
+      menuToggle.addEventListener('click', function() {
+        const isOpen = mobileNav.classList.toggle('open');
+        iconOpen.style.display = isOpen ? 'none' : 'block';
+        iconClose.style.display = isOpen ? 'block' : 'none';
+      });
+
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileNav.classList.remove('open');
+          iconOpen.style.display = 'block';
+          iconClose.style.display = 'none';
+        });
+      });
+    }
+  </script>
+</body>
+</html>
