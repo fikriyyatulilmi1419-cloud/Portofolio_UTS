@@ -22,7 +22,7 @@ class Akademik(models.Model):
     nama = models.CharField(max_length=100)
     institusi = models.CharField(max_length=100)
     tahun_masuk = models.IntegerField()
-    tahun_lulus = models.IntegerField()
+    tahun_lulus = models.CharField(max_length=5, blank=True, null=True, help_text="Tahun lulus bisa kosong jika masih kuliah")
     deskripsi = models.TextField(blank=True, null=True)
     tags = models.CharField(max_length=200, blank=True, null=True, help_text="Pisahkan tag dengan koma, misal: S1, Informatika, UNU Yogyakarta")
 
