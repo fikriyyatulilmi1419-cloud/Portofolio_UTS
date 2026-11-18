@@ -18,3 +18,23 @@ class PesanKontak(models.Model):
 
     def __str__(self):
         return f"Pesan dari {self.nama}"
+class Akademik(models.Model):
+    nama = models.CharField(max_length=100)
+    institusi = models.CharField(max_length=100)
+    tahun_masuk = models.IntegerField()
+    tahun_lulus = models.IntegerField()
+    deskripsi = models.TextField(blank=True, null=True)
+    tags = models.CharField(max_length=200, blank=True, null=True, help_text="Pisahkan tag dengan koma, misal: S1, Informatika, UNU Yogyakarta")
+
+    def __str__(self):
+        return self.nama
+
+    def get_tags(self):
+        """Memecah string tags dari database berdasarkan tanda koma menjadi list, sekaligus menghapus spasi ekstra."""
+        if self.tags:
+            return [tag.strip() for tag in self.tags.split(',') if tag.strip()]
+        return []
+
+    @property
+    def list_tags(self):
+        return self.get_tags()

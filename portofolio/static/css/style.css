@@ -13,24 +13,54 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
   font-family: "DM Sans", sans-serif;
   line-height: 1.6;
+  padding-top: 82px;
 }
 a { color: inherit; text-decoration: none; }
 .wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
 
-/* Topbar */
+/* Fixed & Floating Topbar Header */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(247, 248, 243, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+/* Status saat melayang di atas konten (setelah di-scroll) */
+.site-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 20px -2px rgba(23, 35, 31, 0.08);
+}
+
+/* Status tersembunyi saat scroll ke bawah */
+.site-header.nav-hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
+}
+
+/* Topbar content */
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 82px;
-  border-bottom: 1px solid var(--line);
 }
 .brand { font: 800 1.15rem "Manrope", sans-serif; letter-spacing: -0.02em; display: inline-flex; align-items: center; gap: 4px; }
 .brand span { color: var(--green); }
@@ -55,7 +85,7 @@ nav.desktop-nav a:hover { color: var(--green); }
   flex-direction: column;
   gap: 12px;
   padding: 16px 0 20px;
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
 .mobile-nav.open { display: flex; }
 .mobile-nav a { font-size: .95rem; font-weight: 500; color: #53625a; padding: 6px 0; }
@@ -336,6 +366,8 @@ footer {
 
 /* Responsive */
 @media (max-width: 760px) {
+  html { scroll-padding-top: 75px; }
+  body { padding-top: 70px; }
   .wrap { width: min(100% - 36px, 560px); }
   .topbar { min-height: 70px; }
   nav.desktop-nav { display: none; }

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Proyek, PesanKontak
+from .models import Proyek, PesanKontak, Akademik
 
 
 def beranda(request):
@@ -50,9 +50,12 @@ def beranda(request):
             ]
         }
     ]
+    daftar_akademik = Akademik.objects.all().order_by('-tahun_masuk')
 
     context = {
         'daftar_proyek': daftar_proyek,
         'keahlian_kategori': keahlian_kategori,
+        'daftar_akademik': daftar_akademik,
+        
     }
     return render(request, 'portofolio/beranda.html', context)
