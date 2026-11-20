@@ -1,19 +1,14 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "portofolio/wsgi.py",
-            "use": "@vercel/python",
-            "config" : {
-                "maxLambdaSize": "15mb",
-                "runtime": "python3.9"
-            }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/static(.*)",
-            "dest": "/static/$1"
-        }
-    ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "portofolio/wsgi.py": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "portofolio/wsgi.py"
+    }
+  ]
 }
